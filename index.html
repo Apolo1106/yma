@@ -148,12 +148,12 @@
     <!-- UI Capa Superior -->
     <div id="ui-layer">
         <div class="text-center w-full mt-4 md:mt-8">
-            <h2 class="font-cinzel text-pink-400 text-xs md:text-sm tracking-[0.4em] uppercase mb-2">Nuestro Universo</h2>
+            <h2 class="font-cinzel text-pink-400 text-xs md:text-sm tracking-[0.4em] uppercase mb-2">Amy y Salva</h2>
             <h1 id="main-title" class="font-dancing text-white text-6xl md:text-8xl title-glow mb-4">6 Meses</h1>
             
             <div class="inline-flex flex-col items-center justify-center stats-badge px-6 py-3 mt-2">
                 <span id="days-counter" class="text-2xl md:text-3xl font-light text-white mb-1">...</span>
-                <span class="text-xs text-pink-200 tracking-wider uppercase font-cinzel">Estrellas en tu honor</span>
+                <span class="text-xs text-pink-200 tracking-wider uppercase font-cinzel"> Te amo Amy</span>
             </div>
         </div>
         
@@ -205,34 +205,34 @@
         // ==========================================
         const memories = [
             {
-                url: 'https://placehold.co/800x800/31102A/FFB6C1?text=Mes+1', 
-                title: 'El Comienzo',
-                description: 'La chispa que encendió esta galaxia. Aquel 28 de marzo de 2026 mi vida cambió para siempre.'
+                url: 'foto1.jpeg', 
+                title: 'Mes 1',
+                description: 'Desde el primer momento yo sabia que no me alcanzaba con nadie que no fueras vos.'
             },
             {
-                url: 'https://placehold.co/800x800/4A154B/FFD700?text=Mes+2',
-                title: 'Nuestras Risas',
-                description: 'Tus chistes y tu sonrisa iluminan hasta mis días más oscuros. Eres mi sol.'
+                url: 'foto2.jpeg',
+                title: 'Mes 2',
+                description: '"Lentamente" me fuiste dejando entrar en tu vida y en tu forma de ver las cosas tan particular.'
             },
             {
-                url: 'https://placehold.co/800x800/1A1A3A/00FFFF?text=Mes+3',
-                title: 'Aventuras',
-                description: 'Cada momento a tu lado es una nueva constelación que descubrimos juntos.'
+                url: 'foto3.jpeg',
+                title: 'Mes 3',
+                description: 'Tambien fuiste aprendiendo de como vivia yo y cocinar, aunque a veces vos me ayudabas a mi'
             },
             {
-                url: 'https://placehold.co/800x800/2C001E/FF69B4?text=Mes+4',
-                title: 'Tu Apoyo',
-                description: 'Gracias por ser mi gravedad, manteniéndome firme cuando siento que floto a la deriva.'
+                url: 'foto4.jpeg',
+                title: 'Mes 4',
+                description: 'Cuando me dijiste que me amabas, cada vez me daba mas cuenta que eras la mujer y el amor de mi vida.'
             },
             {
-                url: 'https://placehold.co/800x800/00203F/ADEFD1?text=Mes+5',
-                title: 'Crecimiento',
-                description: 'Crecer a tu lado es el viaje más hermoso. Te admiro cada día más.'
+                url: 'foto5.jpeg',
+                title: 'Mes 5',
+                description: 'Me celebraste mi cumpleaños y me redefiniste lo feliz que podia ser en uno por mas cruzado que lo tuviera.'
             },
             {
-                url: 'https://placehold.co/800x800/400036/EAE2D6?text=Mes+6',
-                title: 'Hoy y Siempre',
-                description: 'Felices meses, mi amor. Y que esta galaxia siga sumando estrellas por el resto de nuestras vidas.'
+                url: 'foto6.jpeg',
+                title: 'Mes 6',
+                description: 'El sexto de muchos mas por venir. Lo nuestro, por mas cringe que te de, esta escrito en las estrellas. Te amo Amy.'
             }
         ];
 
@@ -528,25 +528,12 @@
         }
 
         function createCrystalMemories() {
-            // Material de cristal ultra-premium modificado para mayor visibilidad y brillo sutil
-            const glassMaterial = new THREE.MeshPhysicalMaterial({
-                color: 0xffffff,
-                emissive: 0x442266, // Brillo violeta/rosa sutil para que resplandezca
-                metalness: 0.1,     // Menos metálico, más transparente
-                roughness: 0.0,     // Cristal perfectamente liso
-                transmission: 1.0,  // Transmisión total de la luz de la foto
-                ior: 1.15,          // Menor índice de refracción para que la foto se vea clara y no se deforme
-                thickness: 0.2,
-                transparent: true,
-                opacity: 1
-            });
-
             memories.forEach((data, index) => {
                 const group = new THREE.Group();
 
                 // Autocalcular propiedades orbitales para facilitar la adición de nuevos planetas
                 data.distance = 25 + (index * 13); // Cada nuevo planeta se aleja automáticamente
-                data.size = 3.5 + (index * 0.1); // Los planetas base ahora son más grandes
+                data.size = 3.5 + (index * 0.1); // Tamaño de la foto
                 
                 // Velocidad aleatoria (positiva o negativa para orbitar en distintas direcciones)
                 const baseSpeed = 0.001 + (Math.random() * 0.002);
@@ -555,39 +542,46 @@
                 // Ángulo inicial aleatorio para evitar la forma de hélice
                 data.angle = Math.random() * Math.PI * 2; 
 
-                // 1. Burbuja de Cristal (Ahora más grande)
-                const sphereGeo = new THREE.SphereGeometry(data.size, 64, 64);
-                const bubble = new THREE.Mesh(sphereGeo, glassMaterial);
-                group.add(bubble);
+                // 1. Contenedor que siempre mirará a la cámara (Efecto Billboard)
+                const billboardGroup = new THREE.Group();
 
-                // 2. Foto interna (Sprite para que siempre mire a la cámara)
+                // 2. Marco Redondo (El "marquito")
+                const frameGeo = new THREE.CircleGeometry(data.size * 1.07, 64); // Un 7% más grande
+                // Marco rosado pastel brillante
+                const frameMat = new THREE.MeshBasicMaterial({ color: 0xffb6c1, side: THREE.DoubleSide }); 
+                const frame = new THREE.Mesh(frameGeo, frameMat);
+                frame.position.z = -0.05; // Ligeramente atrás de la foto para que funcione de fondo
+                billboardGroup.add(frame);
+
+                // 3. Foto circular (reemplazando la burbuja 3D)
                 const tex = textureLoader.load(data.url);
-                const spriteMat = new THREE.SpriteMaterial({ map: tex, color: 0xffffff });
-                const sprite = new THREE.Sprite(spriteMat);
-                
-                // Escalar el sprite para que ocupe casi toda la burbuja (1.8 en lugar de 1.5)
-                sprite.scale.set(data.size * 1.8, data.size * 1.8, 1);
-                group.add(sprite);
+                const photoGeo = new THREE.CircleGeometry(data.size, 64);
+                const photoMat = new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide });
+                const photo = new THREE.Mesh(photoGeo, photoMat);
+                billboardGroup.add(photo);
 
-                // 3. Anillo de órbita decorativo (opcional, le da un toque cósmico)
+                group.add(billboardGroup);
+
+                // 4. Anillo de órbita decorativo
                 const orbitGeo = new THREE.RingGeometry(data.distance - 0.2, data.distance + 0.2, 128);
-                const orbitMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide, transparent: true, opacity: 0.15 }); // Más visible (0.15)
+                const orbitMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide, transparent: true, opacity: 0.15 });
                 const orbit = new THREE.Mesh(orbitGeo, orbitMat);
                 orbit.rotation.x = Math.PI / 2;
                 scene.add(orbit);
 
-                // Guardar datos para interacción (hacer click en el cristal)
-                bubble.userData = { isPlanet: true, info: data };
+                // Guardar datos para interacción (hacer click en la foto)
+                photo.userData = { isPlanet: true, info: data };
 
-                // Empezar en el centro (escala 0)
+                // Empezar en el centro (escala 0) para la animación de entrada
                 group.scale.set(0, 0, 0);
 
-                // Añadir al control
+                // Añadir a la escena
                 scene.add(group);
                 planetObjects.push({
                     group: group,
-                    mesh: bubble, // Para el raycaster
-                    orbitMesh: orbit, // Para animar el anillo
+                    billboard: billboardGroup, // Guardamos esto para que siempre mire a la cámara
+                    mesh: photo, // Para el raycaster (clics)
+                    orbitMesh: orbit,
                     data: data,
                     currentAngle: data.angle
                 });
@@ -767,18 +761,21 @@
             // Pulsación de la luz central (más suave)
             coreLight.intensity = 1.5 + Math.sin(time * 3) * 0.3;
 
-            // Animación de Planetas/Burbujas
+            // Animación de Fotos Circulares
             planetObjects.forEach(p => {
                 const speedMult = isModalOpen ? 0.05 : 1; // Ralentizar si el modal está abierto
                 
                 p.currentAngle -= (p.data.speed * speedMult);
                 
-                // Mover el Grupo entero (Cristal + Foto)
+                // Mover el Grupo entero a través de la órbita
                 p.group.position.x = Math.cos(p.currentAngle) * p.data.distance;
                 p.group.position.z = Math.sin(p.currentAngle) * p.data.distance;
                 
-                // Flotación sutil en Y
+                // Flotación sutil en el eje Y
                 p.group.position.y = Math.sin(time * 2 + p.data.distance) * 2;
+
+                // MAGIA AQUÍ: Hacer que el marco y la foto siempre miren directamente a la cámara
+                p.billboard.lookAt(camera.position);
             });
 
             // Renderizar usando el post-procesamiento (Bloom)
